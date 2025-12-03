@@ -1,0 +1,47 @@
+{
+  "name": "sporty-urban-ecommerce-backend",
+  "version": "1.0.0",
+  "description": "Backend for Sporty Urban E-commerce",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "server": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'frontend/*'\" \"npm run frontend\"",
+    "frontend": "cd ../frontend && npm run start",
+    "seed": "node utils/seedLocalDB.js",
+    "install": "cd ../frontend && npm install",
+    "oldbuild": "cd ../frontend && npm run build",
+    "build": "npm install --prefix ./frontend && npm run build --prefix ./frontend && npm install && npm run seed",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cleanModPak": "rm -rf node_modules package-lock.json",
+    "seedUserDb": "node data/seed.js",
+    "seedProductDb": "node data/seed.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.1.0",
+    "axios": "^1.4.0",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.37.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.3.0",
+    "morgan": "^1.10.1",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "nodemon": "^2.0.22"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
