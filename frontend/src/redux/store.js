@@ -34,7 +34,7 @@ const rootReducer = combineReducers({
   favorites: favoritesReducer,
   social: socialReducer,
   music: musicReducer,
-artists: artistsReducer,
+  artists: artistsReducer,
   products: productReducer,
 });
 

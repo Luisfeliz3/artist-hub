@@ -11,6 +11,7 @@ import Layout from './components/layout/Layout';
 // Page Components
 import HomePage from './pages/HomePage';
 // import ArtistProfile from './pages/ArtistProfile';
+import ArtistsPage from './pages/ArtistsPage';
 // import ShopPage from './pages/ShopPage';
 // import MusicPage from './pages/MusicPage';
 // import SocialFeed from './pages/SocialFeed';
@@ -101,7 +102,7 @@ function AppRoutes() {
         <Route index element={<HomePage />} />
         {/* <Route path="artist/:id" element={<ArtistProfile />} /> */}
         {/* <Route path="shop" element={<ShopPage />} /> */}
-        {/* <Route path="music" element={<MusicPage />} /> */}
+        <Route path="artists" element={<ArtistsPage />} />
         {/* <Route path="feed" element={<SocialFeed />} /> */}
         {/* <Route path="cart" element={<CartPage />} /> */}
         

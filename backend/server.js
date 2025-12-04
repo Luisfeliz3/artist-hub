@@ -108,6 +108,7 @@ const socialRoutes = require('./routes/social');
 const musicRoutes = require('./routes/music');
 const seedRoutes = require('./routes/seed');
 const statsRoutes = require('./routes/stats');
+const artistsRoutes = require('./routes/artist');
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -116,6 +117,7 @@ app.use('/api/social', socialRoutes);
 app.use('/api/music', musicRoutes);
 app.use('/api/seed', seedRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/artists', artistsRoutes);
 // Health check route
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
