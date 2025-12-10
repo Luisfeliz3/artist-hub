@@ -8,96 +8,517 @@ const Order = require('../models/Order');
 
 dotenv.config();
 
-const artists = [
+// Enhanced user data with complete profile information
+const users = [
+  // ==================== ARTISTS ====================
   {
     username: 'nova_rhythm',
     email: 'nova@artisthub.com',
     password: 'password123',
-    profileImage: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
+    profileImage: 'https://ui-avatars.com/api/?name=Nova+Rhythm&background=8A2BE2&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1600&h=400&fit=crop',
+    bio: 'Electronic music producer and sound designer from Los Angeles. Creating immersive synthwave and future bass experiences. 5+ years in the industry with releases on major labels.',
+    location: 'Los Angeles, CA',
+    website: 'https://novarhythm.com',
+    phone: '+1 (323) 555-0123',
+    birthday: new Date('1992-08-15'),
     role: 'artist',
+    isVerified: true,
+    isActive: true,
+    followers: 120,
+    // following: 89,
+    socialLinks: {
+      instagram: 'https://instagram.com/nova_rhythm',
+      twitter: 'https://twitter.com/nova_rhythm',
+      tiktok: 'https://tiktok.com/@nova_rhythm',
+      youtube: 'https://youtube.com/c/novarhythm',
+      spotify: 'https://open.spotify.com/artist/nova',
+      soundcloud: 'https://soundcloud.com/nova-rhythm',
+      facebook: 'https://facebook.com/nova.rhythm.music'
+    },
     artistProfile: {
-      bio: 'Electronic music producer creating futuristic soundscapes. Blending synthwave with modern electronic elements.',
-      genre: ['Electronic', 'Synthwave', 'Future Bass'],
-      location: 'Los Angeles, CA',
-      website: 'https://novarhythm.com',
-      socialLinks: {
-        instagram: 'https://instagram.com/nova_rhythm',
-        twitter: 'https://twitter.com/nova_rhythm',
-        tiktok: 'https://tiktok.com/@nova_rhythm',
-        youtube: 'https://youtube.com/c/novarhythm',
-        spotify: 'https://open.spotify.com/artist/nova'
+      stageName: 'Nova Rhythm',
+      realName: 'Alex Johnson',
+      genre: ['Electronic', 'Synthwave', 'Future Bass', 'Chillwave'],
+      instruments: ['Synthesizers', 'Drum Machine', 'DAW', 'Guitar'],
+      influences: ['Kavinsky', 'The Midnight', 'FM-84', 'Timecop1983'],
+      yearsActive: 5,
+      label: 'Neon Dreams Records',
+      setup: 'Ableton Live, Moog Subsequent, Roland TR-8S, Arturia KeyLab',
+      achievements: [
+        '2023: Synthwave Artist of the Year',
+        '2022: 1M+ Streams on Spotify',
+        '2021: Featured on Spotify\'s "Synthwave Now"',
+        '2020: Debut album "Neon Dreams" released'
+      ],
+      upcomingEvents: [
+        {
+          date: new Date('2024-03-15'),
+          venue: 'The Roxy Theatre',
+          city: 'Los Angeles, CA',
+          tickets: 'https://tickets.novarhythm.com'
+        },
+        {
+          date: new Date('2024-04-20'),
+          venue: 'Brooklyn Steel',
+          city: 'New York, NY',
+          tickets: 'https://tickets.novarhythm.com/nyc'
+        }
+      ],
+      discography: [
+        { year: 2023, title: 'Digital Dreams EP', type: 'EP', tracks: 6 },
+        { year: 2022, title: 'Midnight Drive', type: 'Single', tracks: 1 },
+        { year: 2021, title: 'Neon Dreams', type: 'Album', tracks: 12 },
+        { year: 2020, title: 'First Light', type: 'EP', tracks: 5 }
+      ]
+    },
+    paymentMethods: [
+      {
+        type: 'card',
+        last4: '4242',
+        expiryDate: '12/25',
+        nameOnCard: 'Alex Johnson',
+        isDefault: true
+      },
+      {
+        type: 'paypal',
+        email: 'alex@novarhythm.com',
+        isDefault: false
       }
-    }
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: true,
+      marketingEmails: false
+    },
+    privacy: 'public',
+    theme: 'dark',
+    language: 'en'
   },
   {
     username: 'luna_waves',
     email: 'luna@artisthub.com',
     password: 'password123',
-    profileImage: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w-400&h=400&fit=crop',
+    profileImage: 'https://ui-avatars.com/api/?name=Luna+Waves&background=00D4FF&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1600&h=400&fit=crop',
+    bio: 'Indie dream pop artist with ethereal vocals and atmospheric instrumentals. Based in Portland, crafting songs about love, loss, and self-discovery.',
+    location: 'Portland, OR',
+    website: 'https://lunawaves.com',
+    phone: '+1 (503) 555-9876',
+    birthday: new Date('1995-03-22'),
     role: 'artist',
+    isVerified: true,
+    isActive: true,
+    followers: 89000,
+    // following: 156,
+    socialLinks: {
+      instagram: 'https://instagram.com/luna_waves',
+      twitter: 'https://twitter.com/luna_waves',
+      tiktok: 'https://tiktok.com/@luna_waves',
+      youtube: 'https://youtube.com/c/lunawaves',
+      spotify: 'https://open.spotify.com/artist/luna',
+      soundcloud: 'https://soundcloud.com/luna-waves',
+      bandcamp: 'https://lunawaves.bandcamp.com'
+    },
     artistProfile: {
-      bio: 'Indie dream pop artist with ethereal vocals and atmospheric instrumentals.',
-      genre: ['Indie', 'Dream Pop', 'Alternative'],
-      location: 'Portland, OR',
-      website: 'https://lunawaves.com',
-      socialLinks: {
-        instagram: 'https://instagram.com/luna_waves',
-        twitter: 'https://twitter.com/luna_waves',
-        tiktok: 'https://tiktok.com/@luna_waves',
-        youtube: 'https://youtube.com/c/lunawaves',
-        spotify: 'https://open.spotify.com/artist/luna'
+      stageName: 'Luna Waves',
+      realName: 'Sophie Martinez',
+      genre: ['Indie', 'Dream Pop', 'Alternative', 'Folk'],
+      instruments: ['Vocals', 'Guitar', 'Piano', 'Ukulele'],
+      influences: ['Mitski', 'Phoebe Bridgers', 'Japanese Breakfast', 'Big Thief'],
+      yearsActive: 3,
+      label: 'Indie Collective',
+      setup: 'Logic Pro, Taylor Guitar, Fender Jazzmaster, Focusrite Interface',
+      achievements: [
+        '2023: Featured on NPR Tiny Desk Contest',
+        '2022: West Coast Tour (15 cities)',
+        '2021: Debut EP "Moonlight Sessions" released',
+        '2020: 500K+ streams across platforms'
+      ],
+      upcomingEvents: [
+        {
+          date: new Date('2024-02-28'),
+          venue: 'Mississippi Studios',
+          city: 'Portland, OR',
+          tickets: 'https://tickets.lunawaves.com'
+        }
+      ],
+      discography: [
+        { year: 2023, title: 'Ocean Breeze', type: 'Single', tracks: 1 },
+        { year: 2022, title: 'Moonlight Sessions', type: 'EP', tracks: 5 },
+        { year: 2021, title: 'Starry Nights', type: 'Album', tracks: 10 }
+      ]
+    },
+    paymentMethods: [
+      {
+        type: 'card',
+        last4: '8888',
+        expiryDate: '06/24',
+        nameOnCard: 'Sophie Martinez',
+        isDefault: true
       }
-    }
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: false,
+      marketingEmails: true
+    },
+    privacy: 'public',
+    theme: 'dark',
+    language: 'en'
   },
   {
     username: 'echo_theory',
     email: 'echo@artisthub.com',
     password: 'password123',
-    profileImage: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop',
+    profileImage: 'https://ui-avatars.com/api/?name=Echo+Theory&background=FF4D4D&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&h=400&fit=crop',
+    bio: 'Alternative rock band from Brooklyn known for powerful vocals and intricate guitar work. Blending post-rock elements with indie sensibilities.',
+    location: 'Brooklyn, NY',
+    website: 'https://echotheory.com',
+    phone: '+1 (718) 555-4567',
+    birthday: new Date('2018-06-10'), // Band formation date
     role: 'artist',
+    isVerified: true,
+    isActive: true,
+    followers: 156000,
+    // following: 203,
+    socialLinks: {
+      instagram: 'https://instagram.com/echo_theory',
+      twitter: 'https://twitter.com/echo_theory',
+      tiktok: 'https://tiktok.com/@echo_theory',
+      youtube: 'https://youtube.com/c/echotheory',
+      spotify: 'https://open.spotify.com/artist/echo',
+      bandcamp: 'https://echotheory.bandcamp.com',
+      facebook: 'https://facebook.com/echotheoryband'
+    },
     artistProfile: {
-      bio: 'Alternative rock band with powerful vocals and intricate guitar work.',
-      genre: ['Alternative Rock', 'Indie Rock', 'Post-Rock'],
-      location: 'Brooklyn, NY',
-      website: 'https://echotheory.com',
-      socialLinks: {
-        instagram: 'https://instagram.com/echo_theory',
-        twitter: 'https://twitter.com/echo_theory',
-        tiktok: 'https://tiktok.com/@echo_theory',
-        youtube: 'https://youtube.com/c/echotheory',
-        spotify: 'https://open.spotify.com/artist/echo'
+      stageName: 'Echo Theory',
+      realName: 'Band',
+      genre: ['Alternative Rock', 'Indie Rock', 'Post-Rock', 'Shoegaze'],
+      instruments: ['Vocals', 'Guitar', 'Bass', 'Drums', 'Synth'],
+      influences: ['Radiohead', 'Interpol', 'The National', 'Slowdive'],
+      yearsActive: 6,
+      label: 'Brooklyn Sound Records',
+      setup: 'Multiple guitar rigs, vintage synthesizers, full drum kit',
+      achievements: [
+        '2023: Headlined Brooklyn Steel (sold out)',
+        '2022: National Tour (30+ cities)',
+        '2021: Album "Reflections" reached #15 on indie charts',
+        '2020: Featured in Rolling Stone "Artists to Watch"'
+      ],
+      upcomingEvents: [
+        {
+          date: new Date('2024-05-10'),
+          venue: 'Madison Square Garden',
+          city: 'New York, NY',
+          tickets: 'https://tickets.echotheory.com/msg'
+        },
+        {
+          date: new Date('2024-06-15'),
+          venue: 'Red Rocks Amphitheatre',
+          city: 'Morrison, CO',
+          tickets: 'https://tickets.echotheory.com/redrocks'
+        }
+      ],
+      discography: [
+        { year: 2023, title: 'Urban Echoes', type: 'Album', tracks: 11 },
+        { year: 2022, title: 'Midnight City', type: 'Single', tracks: 1 },
+        { year: 2021, title: 'Reflections', type: 'Album', tracks: 10 },
+        { year: 2020, title: 'First Light EP', type: 'EP', tracks: 6 }
+      ]
+    },
+    paymentMethods: [
+      {
+        type: 'card',
+        last4: '5555',
+        expiryDate: '09/26',
+        nameOnCard: 'Echo Theory LLC',
+        isDefault: true
+      },
+      {
+        type: 'bank',
+        accountType: 'business',
+        isDefault: false
       }
-    }
-  }
-];
-
-const users = [
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: true,
+      marketingEmails: true
+    },
+    privacy: 'public',
+    theme: 'dark',
+    language: 'en'
+  },
+  {
+    username: 'midnight_syntax',
+    email: 'midnight@artisthub.com',
+    password: 'password123',
+    profileImage: 'https://ui-avatars.com/api/?name=Midnight+Syntax&background=00CC88&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1600&h=400&fit=crop',
+    bio: 'Hip-hop producer and beatmaker from Atlanta. Specializing in lo-fi beats, boom bap, and experimental hip-hop production.',
+    location: 'Atlanta, GA',
+    website: 'https://midnightsyntax.com',
+    phone: '+1 (404) 555-7890',
+    birthday: new Date('1990-11-30'),
+    role: 'artist',
+    isVerified: false,
+    isActive: true,
+    followers: 45000,
+    // following: 67,
+    socialLinks: {
+      instagram: 'https://instagram.com/midnight_syntax',
+      twitter: 'https://twitter.com/midnight_syntax',
+      youtube: 'https://youtube.com/c/midnightsyntax',
+      spotify: 'https://open.spotify.com/artist/midnight',
+      soundcloud: 'https://soundcloud.com/midnight-syntax',
+      bandcamp: 'https://midnightsyntax.bandcamp.com'
+    },
+    artistProfile: {
+      stageName: 'Midnight Syntax',
+      realName: 'Marcus Williams',
+      genre: ['Hip Hop', 'Lo-fi', 'Boom Bap', 'Experimental'],
+      instruments: ['MPC', 'Sampler', 'Keyboard', 'DAW'],
+      influences: ['J Dilla', 'Madlib', 'Flying Lotus', 'Knxwledge'],
+      yearsActive: 8,
+      label: 'Independent',
+      setup: 'MPC Live II, SP-404, Komplete Kontrol, Studio Monitors',
+      achievements: [
+        '2023: Beat featured on major label album',
+        '2022: 100K monthly listeners on Spotify',
+        '2021: Started beat subscription service',
+        '2020: Beat tape series "Midnight Sessions"'
+      ],
+      upcomingEvents: [
+        {
+          date: new Date('2024-04-05'),
+          venue: 'Aisle 5',
+          city: 'Atlanta, GA',
+          tickets: 'https://tickets.midnightsyntax.com'
+        }
+      ],
+      discography: [
+        { year: 2023, title: 'Urban Grooves Vol. 3', type: 'Beat Tape', tracks: 15 },
+        { year: 2022, title: 'Night Shift', type: 'EP', tracks: 7 },
+        { year: 2021, title: 'Midnight Sessions II', type: 'Album', tracks: 12 }
+      ]
+    },
+    paymentMethods: [
+      {
+        type: 'paypal',
+        email: 'marcus@midnightsyntax.com',
+        isDefault: true
+      }
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: true,
+      marketingEmails: false
+    },
+    privacy: 'private',
+    theme: 'dark',
+    language: 'en'
+  },
+  
+  // ==================== REGULAR USERS ====================
   {
     username: 'music_fan',
     email: 'fan@artisthub.com',
     password: 'password123',
-    profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+    profileImage: 'https://ui-avatars.com/api/?name=Music+Fan&background=FFAA00&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1600&h=400&fit=crop',
+    bio: 'Music enthusiast and collector. Always searching for new artists and supporting independent music. Vinyl collector with 500+ records.',
+    location: 'Chicago, IL',
+    website: '',
+    phone: '+1 (312) 555-1234',
+    birthday: new Date('1988-05-18'),
     role: 'user',
-    artistProfile: null
+    isVerified: true,
+    isActive: true,
+    followers: 245,
+    // following: 128,
+    socialLinks: {
+      instagram: 'https://instagram.com/musicfan88',
+      twitter: 'https://twitter.com/musicfan88',
+      spotify: 'https://open.spotify.com/user/musicfan88'
+    },
+    paymentMethods: [
+      {
+        type: 'card',
+        last4: '1234',
+        expiryDate: '03/25',
+        nameOnCard: 'John Smith',
+        isDefault: true
+      },
+      {
+        type: 'card',
+        last4: '5678',
+        expiryDate: '11/24',
+        nameOnCard: 'John Smith',
+        isDefault: false
+      }
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: true,
+      marketingEmails: true
+    },
+    privacy: 'public',
+    theme: 'dark',
+    language: 'en',
+    preferences: {
+      favoriteGenres: ['Electronic', 'Indie', 'Alternative', 'Jazz'],
+      notificationFrequency: 'daily',
+      autoplay: true,
+      explicitContent: true
+    }
   },
   {
-    username: 'collector',
+    username: 'vinyl_collector',
     email: 'collector@artisthub.com',
     password: 'password123',
-    profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+    profileImage: 'https://ui-avatars.com/api/?name=Vinyl+Collector&background=9C27B0&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1600&h=400&fit=crop',
+    bio: 'Passionate vinyl collector since 2010. Specializing in limited edition pressings and rare finds. Always on the hunt for colored vinyl!',
+    location: 'Seattle, WA',
+    website: 'https://vinylblog.collector.com',
+    phone: '+1 (206) 555-9876',
+    birthday: new Date('1985-09-12'),
     role: 'user',
-    artistProfile: null
+    isVerified: false,
+    isActive: true,
+    followers: 567,
+    // following: 89,
+    socialLinks: {
+      instagram: 'https://instagram.com/vinyl_collector',
+      twitter: 'https://twitter.com/vinylcollector',
+      discogs: 'https://discogs.com/user/vinylcollector'
+    },
+    paymentMethods: [
+      {
+        type: 'card',
+        last4: '4321',
+        expiryDate: '08/26',
+        nameOnCard: 'Michael Chen',
+        isDefault: true
+      },
+      {
+        type: 'paypal',
+        email: 'michael@collector.com',
+        isDefault: false
+      }
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: false,
+      marketingEmails: true
+    },
+    privacy: 'friends',
+    theme: 'light',
+    language: 'en',
+    preferences: {
+      favoriteGenres: ['Rock', 'Jazz', 'Folk', 'Classical'],
+      notificationFrequency: 'weekly',
+      autoplay: false,
+      explicitContent: false
+    }
   },
   {
-    username: 'demo_admin',
+    username: 'concert_goer',
+    email: 'concert@artisthub.com',
+    password: 'password123',
+    profileImage: 'https://ui-avatars.com/api/?name=Concert+Goer&background=FF4D4D&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&h=400&fit=crop',
+    bio: 'Live music enthusiast! Attended 50+ concerts in the past year. Always looking for the next great show. Front row or nothing!',
+    location: 'Austin, TX',
+    website: '',
+    phone: '+1 (512) 555-3456',
+    birthday: new Date('1993-07-25'),
+    role: 'user',
+    isVerified: true,
+    isActive: true,
+    followers: 892,
+    // following: 456,
+    socialLinks: {
+      instagram: 'https://instagram.com/concert_goer',
+      twitter: 'https://twitter.com/concertgoer93',
+      songkick: 'https://songkick.com/users/concertgoer'
+    },
+    paymentMethods: [
+      {
+        type: 'card',
+        last4: '9876',
+        expiryDate: '05/25',
+        nameOnCard: 'Sarah Johnson',
+        isDefault: true
+      }
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: true,
+      marketingEmails: true
+    },
+    privacy: 'public',
+    theme: 'dark',
+    language: 'en',
+    preferences: {
+      favoriteGenres: ['Alternative', 'Indie', 'Rock', 'Electronic'],
+      notificationFrequency: 'instant',
+      autoplay: true,
+      explicitContent: true
+    }
+  },
+  
+  // ==================== ADMIN USER ====================
+  {
+    username: 'admin_user',
     email: 'admin@artisthub.com',
     password: 'password123',
-    profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+    profileImage: 'https://ui-avatars.com/api/?name=Admin+User&background=607D8B&color=fff&size=400',
+    coverImage: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1600&h=400&fit=crop',
+    bio: 'Platform administrator and community manager. Dedicated to supporting artists and creating the best music community online.',
+    location: 'San Francisco, CA',
+    website: 'https://artisthub.com/admin',
+    phone: '+1 (415) 555-7890',
+    birthday: new Date('1982-12-01'),
     role: 'admin',
-    artistProfile: null
+    isVerified: true,
+    isActive: true,
+    followers: 1200,
+    // following: 345,
+    socialLinks: {
+      twitter: 'https://twitter.com/artisthub_admin',
+      linkedin: 'https://linkedin.com/in/artisthub-admin'
+    },
+    paymentMethods: [
+      {
+        type: 'card',
+        last4: '0000',
+        expiryDate: '12/30',
+        nameOnCard: 'ArtistHub Admin',
+        isDefault: true
+      }
+    ],
+    notifications: {
+      emailNotifications: true,
+      pushNotifications: true,
+      marketingEmails: false
+    },
+    privacy: 'private',
+    theme: 'dark',
+    language: 'en',
+    adminPermissions: {
+      canManageUsers: true,
+      canManageContent: true,
+      canManagePayments: true,
+      canViewAnalytics: true,
+      canManageArtists: true
+    }
   }
 ];
 
+// Sample products for artists
 const products = [
   // Nova Rhythm Products
   {
@@ -107,11 +528,10 @@ const products = [
     category: 'digital',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&h=800&fit=crop',
+        url: 'https://ui-avatars.com/api/?name=Neon+Dreams&background=8A2BE2&color=fff&size=800',
         alt: 'Neon Dreams Album Cover'
       }
     ],
-    variants: [],
     stock: 9999,
     digitalContent: 'https://example.com/downloads/neon-dreams.zip',
     tags: ['digital', 'album', 'synthwave', 'electronic'],
@@ -119,7 +539,10 @@ const products = [
     stats: {
       sales: 124,
       views: 2567,
-      likes: 89
+      likes: 89,
+      averageRating : 5,
+      reviewCount :23
+
     }
   },
   {
@@ -129,7 +552,7 @@ const products = [
     category: 'physical',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1598387993499-40ad4b2adecd?w=800&h=800&fit=crop',
+        url: 'https://ui-avatars.com/api/?name=Vinyl+Edition&background=00D4FF&color=fff&size=800',
         alt: 'Limited Edition Vinyl'
       }
     ],
@@ -149,41 +572,12 @@ const products = [
     stats: {
       sales: 87,
       views: 1890,
-      likes: 145
+      likes: 145,
+      averageRating : 4,
+      reviewCount :13
     }
   },
-  {
-    name: 'Tour Hoodie 2024',
-    description: 'Premium quality hoodie with embroidered logo and tour dates on back. 80% cotton, 20% polyester.',
-    price: 64.99,
-    category: 'merch',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop',
-        alt: 'Tour Hoodie'
-      }
-    ],
-    variants: [
-      {
-        name: 'Size',
-        options: [
-          { value: 'S', priceAdjustment: 0, stock: 50 },
-          { value: 'M', priceAdjustment: 0, stock: 75 },
-          { value: 'L', priceAdjustment: 0, stock: 75 },
-          { value: 'XL', priceAdjustment: 2, stock: 50 }
-        ]
-      }
-    ],
-    stock: 250,
-    tags: ['clothing', 'hoodie', 'tour', 'merch'],
-    featured: false,
-    stats: {
-      sales: 203,
-      views: 3456,
-      likes: 287
-    }
-  },
-
+  
   // Luna Waves Products
   {
     name: 'Acoustic EP - "Moonlight Sessions"',
@@ -192,11 +586,10 @@ const products = [
     category: 'digital',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&h=800&fit=crop',
+        url: 'https://ui-avatars.com/api/?name=Moonlight+Sessions&background=00CC88&color=fff&size=800',
         alt: 'Moonlight Sessions EP Cover'
       }
     ],
-    variants: [],
     stock: 9999,
     digitalContent: 'https://example.com/downloads/moonlight-sessions.zip',
     tags: ['digital', 'ep', 'acoustic', 'indie'],
@@ -204,39 +597,12 @@ const products = [
     stats: {
       sales: 156,
       views: 2345,
-      likes: 112
+      likes: 112,
+      averageRating : 3,
+      reviewCount :44
     }
   },
-  {
-    name: 'Cassette Tape Bundle',
-    description: 'Limited edition cassette tape with exclusive B-sides. Includes digital download code.',
-    price: 24.99,
-    category: 'physical',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1563291074-2bf8677ac0e5?w=800&h=800&fit=crop',
-        alt: 'Cassette Tape Bundle'
-      }
-    ],
-    variants: [
-      {
-        name: 'Tape Color',
-        options: [
-          { value: 'Pink', priceAdjustment: 0, stock: 100 },
-          { value: 'Blue', priceAdjustment: 0, stock: 100 }
-        ]
-      }
-    ],
-    stock: 200,
-    tags: ['cassette', 'limited', 'retro', 'bundle'],
-    featured: false,
-    stats: {
-      sales: 67,
-      views: 1234,
-      likes: 78
-    }
-  },
-
+  
   // Echo Theory Products
   {
     name: 'Concert Tickets - World Tour',
@@ -245,7 +611,7 @@ const products = [
     category: 'ticket',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1501281667305-0d4eb5394f76?w=800&h=800&fit=crop',
+        url: 'https://ui-avatars.com/api/?name=Concert+Tickets&background=FF4D4D&color=fff&size=800',
         alt: 'Concert Tickets'
       }
     ],
@@ -265,34 +631,15 @@ const products = [
     stats: {
       sales: 456,
       views: 5678,
-      likes: 321
-    }
-  },
-  {
-    name: 'Guitar Pick Set',
-    description: 'Set of 10 custom-designed guitar picks used by the band. Different thicknesses included.',
-    price: 14.99,
-    category: 'merch',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&h=800&fit=crop',
-        alt: 'Guitar Pick Set'
-      }
-    ],
-    variants: [],
-    stock: 500,
-    tags: ['accessories', 'music', 'guitar', 'collectible'],
-    featured: false,
-    stats: {
-      sales: 189,
-      views: 2345,
-      likes: 167
+      likes: 321,
+         averageRating : 4,
+      reviewCount :54
     }
   }
 ];
 
+// Sample social posts
 const socialPosts = [
-  // Instagram-style posts
   {
     platform: 'instagram',
     content: 'Studio session vibes 🎵 Working on new material for the upcoming album! #studio #newmusic #producer',
@@ -303,40 +650,9 @@ const socialPosts = [
         thumbnail: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop'
       }
     ],
-    metadata: {
-      externalId: 'insta_001',
-      likes: 1245,
-      comments: 89,
-      shares: 45,
-      views: 5678,
-      postedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
-    },
     tags: ['studio', 'newmusic', 'producer'],
     featured: true
   },
-  {
-    platform: 'instagram',
-    content: 'Throwback to our last show! Can\'t wait to see you all on tour! 🎸 #throwback #concert #live',
-    media: [
-      {
-        url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&h=1200&fit=crop',
-        type: 'image',
-        thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
-      }
-    ],
-    metadata: {
-      externalId: 'insta_002',
-      likes: 890,
-      comments: 56,
-      shares: 23,
-      views: 3456,
-      postedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) // 5 days ago
-    },
-    tags: ['throwback', 'concert', 'live'],
-    featured: false
-  },
-
-  // TikTok-style posts
   {
     platform: 'tiktok',
     content: 'New song snippet! What do you think? 👀 Full version dropping next week! #newsong #snippet',
@@ -347,153 +663,15 @@ const socialPosts = [
         thumbnail: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=400&fit=crop'
       }
     ],
-    metadata: {
-      externalId: 'tiktok_001',
-      likes: 5678,
-      comments: 234,
-      shares: 456,
-      views: 12567,
-      postedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) // 1 day ago
-    },
     tags: ['newsong', 'snippet', 'preview'],
     featured: true
-  },
-
-  // YouTube-style posts
-  {
-    platform: 'youtube',
-    content: 'Full live performance from our last show! Link in bio to watch the full set.',
-    media: [
-      {
-        url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        type: 'video',
-        thumbnail: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=400&h=400&fit=crop'
-      }
-    ],
-    metadata: {
-      externalId: 'youtube_001',
-      likes: 3456,
-      comments: 189,
-      shares: 567,
-      views: 45678,
-      postedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days ago
-    },
-    tags: ['live', 'performance', 'fullset'],
-    featured: false
-  },
-
-  // Spotify-style posts
-  {
-    platform: 'spotify',
-    content: 'New playlist curated by me! Featuring my favorite tracks of the month. Listen now!',
-    media: [
-      {
-        url: 'https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M',
-        type: 'audio',
-        thumbnail: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop'
-      }
-    ],
-    metadata: {
-      externalId: 'spotify_001',
-      likes: 789,
-      comments: 45,
-      shares: 123,
-      views: 8901,
-      postedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
-    },
-    tags: ['playlist', 'curated', 'music'],
-    featured: true
-  },
-
-  // Native platform posts
-  {
-    platform: 'native',
-    content: 'Announcing our exclusive merch drop! Limited quantities available. Link in bio to shop.',
-    media: [
-      {
-        url: 'https://images.unsplash.com/photo-1551029506-0807df4e2031?w-800&h=800&fit=crop',
-        type: 'image',
-        thumbnail: 'https://images.unsplash.com/photo-1551029506-0807df4e2031?w=400&h=400&fit=crop'
-      }
-    ],
-    metadata: {
-      externalId: null,
-      likes: 234,
-      comments: 34,
-      shares: 12,
-      views: 1234,
-      postedAt: new Date()
-    },
-    tags: ['merch', 'drop', 'exclusive', 'limited'],
-    featured: true
-  }
-];
-
-const orders = [
-  {
-    items: [
-      {
-        quantity: 1,
-        price: 39.99,
-        variant: {
-          name: 'Color',
-          option: 'Neon Pink'
-        }
-      },
-      {
-        quantity: 1,
-        price: 14.99
-      }
-    ],
-    totalAmount: 54.98,
-    shippingAddress: {
-      street: '123 Music Lane',
-      city: 'Los Angeles',
-      state: 'CA',
-      country: 'USA',
-      zipCode: '90001'
-    },
-    status: 'delivered',
-    payment: {
-      method: 'stripe',
-      transactionId: 'txn_123456',
-      status: 'completed'
-    },
-    createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days ago
-  },
-  {
-    items: [
-      {
-        quantity: 2,
-        price: 59.99,
-        variant: {
-          name: 'Venue',
-          option: 'Madison Square Garden'
-        }
-      }
-    ],
-    totalAmount: 119.98,
-    shippingAddress: {
-      street: '456 Concert Blvd',
-      city: 'New York',
-      state: 'NY',
-      country: 'USA',
-      zipCode: '10001'
-    },
-    status: 'processing',
-    payment: {
-      method: 'paypal',
-      transactionId: 'PAY-123456',
-      status: 'completed'
-    },
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) // 5 days ago
   }
 ];
 
 async function seedDatabase() {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI || "mongodb+srv://user1:password1234@cluster0.k6ma6.mongodb.net/artist-hub?retryWrites=true&w=majority") 
     console.log('Connected to MongoDB for seeding...');
 
     // Clear existing data
@@ -504,122 +682,213 @@ async function seedDatabase() {
     await Order.deleteMany({});
     console.log('Existing data cleared.');
 
-    // Create artists
-    console.log('Creating artists...');
-    const createdArtists = [];
-    for (const artistData of artists) {
-      const artist = new User(artistData);
-      await artist.save();
-      createdArtists.push(artist);
-      console.log(`Created artist: ${artist.username}`);
-    }
-
-    // Create regular users
+    // Create users
     console.log('\nCreating users...');
     const createdUsers = [];
     for (const userData of users) {
       const user = new User(userData);
       await user.save();
       createdUsers.push(user);
-      console.log(`Created user: ${user.username}`);
+      console.log(`Created user: ${user.username} (${user.role})`);
     }
 
-    // Create products for each artist
+    // Create products and assign to artists
     console.log('\nCreating products...');
     const createdProducts = [];
-    const productTemplates = [...products];
     
-    // Distribute products among artists
-    for (let i = 0; i < productTemplates.length; i++) {
-      const productData = { ...productTemplates[i] };
-      const artistIndex = Math.floor(i / 2) % createdArtists.length;
-      productData.artist = createdArtists[artistIndex]._id;
+    // Get artist users
+    const artists = createdUsers.filter(user => user.role === 'artist');
+    const regularUsers = createdUsers.filter(user => user.role === 'user');
+    
+    for (let i = 0; i < products.length; i++) {
+      const productData = { ...products[i] };
+      
+      // Assign products to artists in round-robin fashion
+      const artistIndex = i % artists.length;
+      productData.artist = artists[artistIndex]._id;
       
       const product = new Product(productData);
       await product.save();
       createdProducts.push(product);
-      console.log(`Created product: ${product.name} for ${createdArtists[artistIndex].username}`);
+      console.log(`Created product: ${product.name} for ${artists[artistIndex].username}`);
+      
+      // Add product to artist's products array
+      await User.findByIdAndUpdate(artists[artistIndex]._id, {
+        $push: { products: product._id }
+      });
     }
 
-    // Create social posts
+    // Create social posts and assign to artists
     console.log('\nCreating social posts...');
     for (let i = 0; i < socialPosts.length; i++) {
       const postData = { ...socialPosts[i] };
-      const artistIndex = i % createdArtists.length;
-      postData.artist = createdArtists[artistIndex]._id;
+      const artistIndex = i % artists.length;
+      postData.artist = artists[artistIndex]._id;
       
       const post = new SocialPost(postData);
       await post.save();
-      console.log(`Created ${post.platform} post for ${createdArtists[artistIndex].username}`);
+      console.log(`Created ${post.platform} post for ${artists[artistIndex].username}`);
     }
 
-    // Create orders
-    console.log('\nCreating orders...');
-    for (let i = 0; i < orders.length; i++) {
-      const orderData = { ...orders[i] };
-      orderData.user = createdUsers[i % createdUsers.length]._id;
-      
-      // Assign actual products to order items
-      for (let j = 0; j < orderData.items.length; j++) {
-        const productIndex = (i + j) % createdProducts.length;
-        orderData.items[j].product = createdProducts[productIndex]._id;
+    // Create sample orders
+    console.log('\nCreating sample orders...');
+    const sampleOrders = [
+      {
+        items: [
+          {
+            quantity: 1,
+            price: 39.99,
+            product: createdProducts[1]._id, // Vinyl
+            variant: {
+              name: 'Color',
+              option: 'Neon Pink'
+            }
+            
+          }
+        ],
+        role : createdUsers[1]._id,
+        orderNumber : "000001019201",
+        subtotal : 40.98,
+        customerEmail : "ipayed@pay.com",
+        name :"Iamname",
+        totalAmount: 44.99, // including variant price adjustment
+        shippingAddress: {
+          street: '123 Music Lane',
+          city: 'Los Angeles',
+          state: 'CA',
+          country: 'USA',
+          zipCode: '90001'
+        },
+        status: 'delivered',
+        payment: {
+          method: 'stripe',
+          transactionId: 'txn_123456',
+          status: 'completed'
+        }
+      },
+      {
+        items: [
+          {
+            quantity: 2,
+            price: 59.99,
+            product: createdProducts[3]._id, // Concert tickets
+            variant: {
+              artist: "THE MAX VIBE@",
+              name: 'Venue',
+              option: 'Madison Square Garden'
+            }
+          }
+        ],
+        role : createdUsers[1]._id,
+        orderNumber : "000001019201B",
+        totalAmount: 139.98,
+        subtotal : 44.65,
+        customerEmail : "uowe@pay.com",
+        shippingAddress: {
+          street: '456 Concert Blvd',
+          city: 'New York',
+          state: 'NY',
+          country: 'USA',
+          zipCode: '10001'
+        },
+        status: 'processing',
+        payment: {
+          method: 'paypal',
+          transactionId: 'PAY-123456',
+          status: 'completed'
+        }
       }
+    ];
+
+    for (let i = 0; i < sampleOrders.length; i++) {
+      const orderData = { ...sampleOrders[i] };
+      const userIndex = i % regularUsers.length;
+      orderData.user = regularUsers[userIndex]._id;
       
       const order = new Order(orderData);
       await order.save();
-      console.log(`Created order #${order._id} for ${createdUsers[i % createdUsers.length].username}`);
+      console.log(`Created order for ${regularUsers[userIndex].username}`);
     }
 
-    // Update artists with favorites and cart
-    console.log('\nSetting up user favorites and cart...');
-    for (let i = 0; i < createdUsers.length; i++) {
-      const user = createdUsers[i];
+    // Create following relationships
+    console.log('\nCreating following relationships...');
+    
+    // Music Fan follows all artists
+    const musicFan = createdUsers.find(u => u.username === 'music_fan');
+    if (musicFan) {
+      for (const artist of artists) {
+        await User.findByIdAndUpdate(musicFan._id, {
+          $push: { following: artist._id }
+        });
+        await User.findByIdAndUpdate(artist._id, {
+          $inc: { followers: 1 }
+        });
+      }
+      console.log(`Music Fan now follows ${artists.length} artists`);
+    }
+
+    // Vinyl Collector follows some artists
+    const vinylCollector = createdUsers.find(u => u.username === 'vinyl_collector');
+    if (vinylCollector && artists.length >= 2) {
+      await User.findByIdAndUpdate(vinylCollector._id, {
+        $push: { following: artists[0]._id }
+      });
+      await User.findByIdAndUpdate(artists[0]._id, {
+        $inc: { followers: 1 }
+      });
+      console.log(`Vinyl Collector now follows ${artists[0].username}`);
+    }
+
+    // Add products to user carts
+    console.log('\nAdding products to user carts...');
+    for (let i = 0; i < regularUsers.length; i++) {
+      const user = regularUsers[i];
+      const productIndex = i % createdProducts.length;
       
-      // Add some products to favorites
-      user.favorites = [
-        createdProducts[i % createdProducts.length]._id,
-        createdProducts[(i + 1) % createdProducts.length]._id
-      ];
-      
-      // Add some products to cart
-      user.cart = [
-        {
-          product: createdProducts[i % createdProducts.length]._id,
-          quantity: 1
-        },
-        {
-          product: createdProducts[(i + 2) % createdProducts.length]._id,
-          quantity: 2
+      await User.findByIdAndUpdate(user._id, {
+        $push: {
+          cart: {
+            product: createdProducts[productIndex]._id,
+            quantity: 1
+          },
+          favorites: createdProducts[(productIndex + 1) % createdProducts.length]._id
         }
-      ];
-      
-      await user.save();
-      console.log(`Updated ${user.username} with favorites and cart`);
+      });
+      console.log(`Added products to ${user.username}'s cart and favorites`);
     }
 
     // Update product sales stats based on orders
     console.log('\nUpdating product sales statistics...');
-    for (const order of await Order.find()) {
+    const allOrders = await Order.find();
+    for (const order of allOrders) {
       for (const item of order.items) {
-        await Product.findByIdAndUpdate(
-          item.product,
-          { $inc: { 'stats.sales': item.quantity } }
-        );
+        if (item.product) {
+          await Product.findByIdAndUpdate(
+            item.product,
+            { $inc: { 'stats.sales': item.quantity } }
+          );
+        }
       }
     }
 
     console.log('\n✅ Database seeding completed successfully!');
     console.log('\n📊 Summary:');
-    console.log(`   Artists created: ${createdArtists.length}`);
-    console.log(`   Users created: ${createdUsers.length}`);
-    console.log(`   Products created: ${createdProducts.length}`);
-    console.log(`   Social posts created: ${socialPosts.length}`);
-    console.log(`   Orders created: ${orders.length}`);
+    console.log(`   Total Users: ${createdUsers.length}`);
+    console.log(`   Artists: ${artists.length}`);
+    console.log(`   Regular Users: ${regularUsers.length}`);
+    console.log(`   Products: ${createdProducts.length}`);
+    console.log(`   Social Posts: ${socialPosts.length}`);
+    console.log(`   Orders: ${sampleOrders.length}`);
     
     console.log('\n👤 Demo Accounts:');
     console.log('   Artist: nova@artisthub.com / password123');
     console.log('   Regular User: fan@artisthub.com / password123');
     console.log('   Admin: admin@artisthub.com / password123');
+    
+    console.log('\n🎯 Sample Profile URLs:');
+    console.log('   Artist Profile: /profile/nova_rhythm');
+    console.log('   User Profile: /profile/music_fan');
+    console.log('   Admin Profile: /profile/admin_user');
 
   } catch (error) {
     console.error('❌ Error seeding database:', error);

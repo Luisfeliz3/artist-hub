@@ -20,7 +20,7 @@ import LoginPage from './pages/LoginPage';
 // import CheckoutPage from './pages/CheckoutPage';
 // import DashboardPage from './pages/DashboardPage';
 // import CartPage from './pages/CartPage';
-// import ProfilePage from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePage';
 
 // Redux
 import { fetchCurrentUser, selectIsAuthenticated, selectAuthLoading } from './redux/slices/authSlice';
@@ -129,9 +129,9 @@ function AppRoutes() {
             {/* <DashboardPage /> */}
           </ProtectedRoute>
         } />
-        <Route path="profile" element={
+        <Route path="profile/:userId?" element={
           <ProtectedRoute>
-            {/* <ProfilePage /> */}
+            <ProfilePage />
           </ProtectedRoute>
         } />
       </Route>

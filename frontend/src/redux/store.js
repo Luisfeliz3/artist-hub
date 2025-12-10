@@ -11,10 +11,11 @@ import favoritesReducer from './slices/favoritesSlice';
 import socialReducer from './slices/socialSlice';
 import musicReducer from './slices/musicSlice';
 import productReducer from './slices/productSlice';
-
+import artistsReducer from './slices/artistsSlice';
+import profileReducer from './slices/profileSlice'; // Add this import
 
 import { apiErrorMiddleware } from './middleware/apiErrorMiddleware';
-import artistsReducer from './slices/artistsSlice';
+ 
 
 
 
@@ -23,7 +24,7 @@ const persistConfig = {
   key: 'root',
   storage,
   whitelist: ['auth', 'user', 'cart', 'favorites'], // Only persist these slices
-  blacklist: ['music', 'social', 'products'], // Don't persist these
+  blacklist: ['music', 'social', 'products', 'artists', 'profile'], // Don't persist these
 };
 
 // Combine reducers
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   music: musicReducer,
   artists: artistsReducer,
   products: productReducer,
+  profile: profileReducer, // Add this line
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -48,7 +50,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }).concat(logger, apiErrorMiddleware),
+    }).concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
