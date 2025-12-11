@@ -1,33 +1,50 @@
+// models/SocialPost.js - Updated with platform-specific enhancements
 const mongoose = require('mongoose');
 
 const socialPostSchema = new mongoose.Schema({
-  // Creator & Platform Info
-  artist: { 
-    type: mongoose.Schema.Types.ObjectId, 
+  // Basic Information
+  title: {
+    type: String,
+    maxlength: 200
+  },
+  
+  content: {
+    type: String,
+    maxlength: 5000
+  },
+  
+  artist: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
     index: true
   },
   
-  platform: { 
-    type: String, 
-    enum: ['instagram', 'tiktok', 'twitter', 'youtube', 'facebook', 'spotify', 'soundcloud', 'bandcamp', 'internal'],
+  // Platform Information
+  platform: {
+    type: String,
+    enum: ['instagram', 'tiktok', 'twitter', 'youtube', 'facebook', 'spotify', 'internal'],
     required: true,
     index: true
   },
   
-  platformPostId: { 
+  platformPostId: {
     type: String,
-    sparse: true // Allows null for internal posts
+    sparse: true
   },
   
-  // Content
-  content: { 
-    type: String,
-    maxlength: 5000
+  platformUrl: {
+    type: String
   },
   
-  // Media
+  // Content Type
+  contentType: {
+    type: String,
+    enum: ['post', 'reel', 'story', 'video', 'tweet', 'live', 'album', 'track'],
+    default: 'post'
+  },
+  
+  // Media Content
   media: [{
     url: { type: String, required: true },
     type: { 
@@ -36,55 +53,161 @@ const socialPostSchema = new mongoose.Schema({
       required: true
     },
     thumbnail: String,
-    duration: Number, // For video/audio in seconds
+    duration: Number,
     width: Number,
     height: Number,
-    alt: String,
+    aspectRatio: String,
+    format: String,
+    size: Number,
     order: { type: Number, default: 0 }
   }],
   
-  // Engagement
-  likes: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User' 
-  }],
+  // Platform-Specific Data
+  platformData: {
+    // Instagram
+    instagram: {
+      isReel: Boolean,
+      isStory: Boolean,
+      musicTrack: String,
+      filters: [String],
+      locationTag: String,
+      productTags: [{
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        position: { x: Number, y: Number }
+      }]
+    },
+    
+    // TikTok
+    tiktok: {
+      sound: {
+        id: String,
+        title: String,
+        author: String
+      },
+      duetEnabled: Boolean,
+      stitchEnabled: Boolean,
+      hashtags: [String],
+      challenges: [String],
+      videoEffects: [String]
+    },
+    
+    // YouTube
+    youtube: {
+      videoId: String,
+      channelId: String,
+      duration: String,
+      category: String,
+      license: String,
+      liveBroadcastContent: String,
+      defaultAudioLanguage: String,
+      caption: Boolean
+    },
+    
+    // Twitter
+    twitter: {
+      isRetweet: Boolean,
+      isQuoteTweet: Boolean,
+      retweetedStatusId: String,
+      quotedStatusId: String,
+      hashtags: [String],
+      symbols: [String],
+      userMentions: [{
+        screenName: String,
+        userId: String
+      }]
+    },
+    
+    // Facebook
+    facebook: {
+      type: String,
+      isLiveVideo: Boolean,
+      is360Video: Boolean,
+      reactions: {
+        like: Number,
+        love: Number,
+        wow: Number,
+        haha: Number,
+        sad: Number,
+        angry: Number
+      }
+    },
+    
+    // Spotify
+    spotify: {
+      trackId: String,
+      albumId: String,
+      artistId: String,
+      durationMs: Number,
+      previewUrl: String,
+      explicit: Boolean,
+      popularity: Number
+    }
+  },
   
-  comments: [{
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    content: { type: String, required: true, maxlength: 1000 },
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    replies: [{
+  // Engagement Metrics
+  metrics: {
+    likes: { type: Number, default: 0 },
+    comments: { type: Number, default: 0 },
+    shares: { type: Number, default: 0 },
+    saves: { type: Number, default: 0 },
+    views: { type: Number, default: 0 },
+    impressions: { type: Number, default: 0 },
+    reach: { type: Number, default: 0 },
+    clicks: { type: Number, default: 0 },
+    engagementRate: { type: Number, default: 0 },
+    
+    // Platform-specific metrics
+    retweets: { type: Number, default: 0 }, // Twitter
+    favorites: { type: Number, default: 0 }, // Twitter
+    bookmarks: { type: Number, default: 0 }, // Twitter
+    
+    plays: { type: Number, default: 0 }, // TikTok/YouTube
+    reposts: { type: Number, default: 0 }, // TikTok
+    
+    subscribersGained: { type: Number, default: 0 } // YouTube
+  },
+  
+  // User Engagement
+  userEngagement: {
+    likes: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User',
+      index: true 
+    }],
+    
+    comments: [{
+      _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
       user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
       content: { type: String, required: true, maxlength: 1000 },
       likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+      replies: [{
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        content: { type: String, required: true, maxlength: 500 },
+        likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+        createdAt: { type: Date, default: Date.now }
+      }],
       createdAt: { type: Date, default: Date.now }
     }],
-    createdAt: { type: Date, default: Date.now }
-  }],
-  
-  shares: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User' 
-  }],
-  
-  saves: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User' 
-  }],
-  
-  // Stats
-  stats: {
-    likesCount: { type: Number, default: 0 },
-    commentsCount: { type: Number, default: 0 },
-    sharesCount: { type: Number, default: 0 },
-    viewsCount: { type: Number, default: 0 },
-    saveCount: { type: Number, default: 0 },
-    reach: { type: Number, default: 0 },
-    engagement: { type: Number, default: 0 }
+    
+    shares: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User' 
+    }],
+    
+    saves: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User' 
+    }],
+    
+    views: [{ 
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      viewedAt: { type: Date, default: Date.now },
+      duration: Number
+    }]
   },
   
-  // Metadata
-  tags: [{ 
+  // Tags & Categories
+  hashtags: [{ 
     type: String,
     lowercase: true,
     index: true
@@ -95,257 +218,221 @@ const socialPostSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
   }],
   
+  categories: [{
+    type: String,
+    enum: ['music', 'dance', 'comedy', 'education', 'gaming', 'sports', 'fashion', 'food', 'travel', 'art']
+  }],
+  
+  // Location
   location: {
     name: String,
 
   },
   
-  // Platform Specific Data
-  platformData: {
-    // Instagram specific
-    instagram: {
-      isReel: Boolean,
-      isStory: Boolean,
-      musicTrack: String,
-      filters: [String]
-    },
-    // TikTok specific
-    tiktok: {
-      sound: String,
-      duetEnabled: Boolean,
-      stitchEnabled: Boolean,
-      hashtags: [String]
-    },
-    // Twitter specific
-    twitter: {
-      isRetweet: Boolean,
-      isQuoteTweet: Boolean,
-      retweetCount: Number,
-      quoteTweetId: String
-    },
-    // YouTube specific
-    youtube: {
-      videoId: String,
-      duration: String,
-      category: String,
-      license: String
-    },
-    // Spotify specific
-    spotify: {
-      trackId: String,
-      albumId: String,
-      artistId: String,
-      durationMs: Number
-    }
-  },
+  // Commerce Features
+  products: [{
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    position: { x: Number, y: Number },
+    price: Number,
+    salePrice: Number
+  }],
   
-  // Scheduling & Publication
-  isPublished: { 
-    type: Boolean, 
-    default: true 
-  },
+  affiliateLinks: [{
+    title: String,
+    url: String,
+    description: String,
+    clicks: { type: Number, default: 0 },
+    revenue: { type: Number, default: 0 }
+  }],
   
-  isScheduled: { 
-    type: Boolean, 
-    default: false 
-  },
-  
-  publishAt: { 
-    type: Date,
+  // Visibility & Moderation
+  visibility: {
+    type: String,
+    enum: ['public', 'followers', 'private', 'scheduled', 'archived'],
+    default: 'public',
     index: true
   },
   
-  publishedAt: { 
+  isFeatured: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  
+  isSponsored: {
+    type: Boolean,
+    default: false
+  },
+  
+  isAgeRestricted: {
+    type: Boolean,
+    default: false
+  },
+  
+  moderationStatus: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected', 'flagged'],
+    default: 'approved'
+  },
+  
+  // Timestamps
+  publishedAt: {
     type: Date,
     default: Date.now,
     index: true
   },
   
-  // Sync Information
-  lastSyncedAt: Date,
-  syncStatus: { 
-    type: String, 
-    enum: ['synced', 'pending', 'failed', 'manual'],
-    default: 'manual'
-  },
-  
-  syncAttempts: { 
-    type: Number, 
-    default: 0 
-  },
-  
-  syncError: String,
-  
-  // Featured & Pinned
-  featured: { 
-    type: Boolean, 
-    default: false,
+  scheduledFor: {
+    type: Date,
     index: true
   },
   
-  isPinned: { 
-    type: Boolean, 
-    default: false 
-  },
-  
-  pinnedUntil: Date,
-  
-  // Product/Commerce Integration
-  products: [{ 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Product' 
-  }],
-  
-  // Link in Bio
-  linkInBio: {
-    enabled: Boolean,
-    title: String,
-    url: String,
-    clicks: { type: Number, default: 0 }
-  },
-  
-  // Privacy
-  isPublic: { 
-    type: Boolean, 
-    default: true 
-  },
-  
-  visibility: { 
-    type: String, 
-    enum: ['public', 'followers', 'private'],
-    default: 'public' 
+  lastUpdatedAt: {
+    type: Date,
+    default: Date.now
   },
   
   // Analytics
   analytics: {
-    impressions: { type: Number, default: 0 },
-    clicks: { type: Number, default: 0 },
-    profileVisits: { type: Number, default: 0 },
-    websiteClicks: { type: Number, default: 0 },
-    engagementRate: { type: Number, default: 0 }
+    watchTime: { type: Number, default: 0 }, // Total watch time in seconds
+    averageViewDuration: { type: Number, default: 0 },
+    clickThroughRate: { type: Number, default: 0 },
+    conversionRate: { type: Number, default: 0 },
+    revenue: { type: Number, default: 0 },
+    
+    // Audience demographics (simplified)
+    audience: {
+      ageGroups: {
+        '13-17': Number,
+        '18-24': Number,
+        '25-34': Number,
+        '35-44': Number,
+        '45+': Number
+      },
+      gender: {
+        male: Number,
+        female: Number,
+        other: Number
+      },
+      countries: [{
+        country: String,
+        viewers: Number
+      }]
+    }
   }
-  
-}, { 
+}, {
   timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 });
 
-// Virtual for like count
-socialPostSchema.virtual('likeCount').get(function() {
-  return this.likes ? this.likes.length : 0;
+// Indexes
+socialPostSchema.index({ artist: 1, publishedAt: -1 });
+socialPostSchema.index({ platform: 1, publishedAt: -1 });
+socialPostSchema.index({ 'hashtags': 1, publishedAt: -1 });
+socialPostSchema.index({ 'categories': 1 });
+socialPostSchema.index({ 'metrics.views': -1 });
+socialPostSchema.index({ 'metrics.likes': -1 });
+socialPostSchema.index({ 'metrics.engagementRate': -1 });
+socialPostSchema.index({ 'visibility': 1, publishedAt: -1 });
+socialPostSchema.index({ 'isFeatured': 1, publishedAt: -1 });
+socialPostSchema.index({ 'content': 'text', 'hashtags': 'text' });
+socialPostSchema.index({ 'location.coordinates': '2dsphere' });
+
+// Virtuals
+socialPostSchema.virtual('engagementScore').get(function() {
+  return (
+    this.metrics.likes * 1 +
+    this.metrics.comments * 2 +
+    this.metrics.shares * 3 +
+    this.metrics.saves * 1.5 +
+    (this.metrics.views / 1000)
+  );
 });
 
-// Virtual for comment count
-socialPostSchema.virtual('commentCount').get(function() {
-  return this.comments ? this.comments.length : 0;
-});
-
-// Virtual for share count
-socialPostSchema.virtual('shareCount').get(function() {
-  return this.shares ? this.shares.length : 0;
-});
-
-// Virtual for save count
-socialPostSchema.virtual('saveCount').get(function() {
-  return this.saves ? this.saves.length : 0;
-});
-
-// Virtual for total engagement
-socialPostSchema.virtual('totalEngagement').get(function() {
-  return this.likeCount + this.commentCount + this.shareCount + this.saveCount;
-});
-
-// Virtual for engagement rate (if we have views)
-socialPostSchema.virtual('engagementRatePercent').get(function() {
-  if (this.stats.viewsCount > 0) {
-    return ((this.totalEngagement / this.stats.viewsCount) * 100).toFixed(2);
-  }
-  return 0;
-});
-
-// Virtual for formatted publish date
-socialPostSchema.virtual('formattedDate').get(function() {
-  const now = new Date();
-  const postDate = this.publishedAt;
-  const diffMs = now - postDate;
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
+socialPostSchema.virtual('isTrending').get(function() {
+  const hoursSincePosted = (Date.now() - this.publishedAt) / (1000 * 60 * 60);
+  if (hoursSincePosted > 72) return false;
   
-  if (diffMins < 60) return `${diffMins}m`;
-  if (diffHours < 24) return `${diffHours}h`;
-  if (diffDays < 7) return `${diffDays}d`;
-  
-  return postDate.toLocaleDateString('en-US', { 
-    month: 'short', 
-    day: 'numeric' 
-  });
+  const engagementRate = this.metrics.views > 0 
+    ? (this.metrics.likes + this.metrics.comments * 2) / this.metrics.views 
+    : 0;
+    
+  return engagementRate > 0.05 && this.metrics.views > 1000;
 });
 
 // Pre-save middleware
 socialPostSchema.pre('save', function(next) {
-  // Update stats from arrays
-  this.stats.likesCount = this.likes ? this.likes.length : 0;
-  this.stats.commentsCount = this.comments ? this.comments.length : 0;
-  this.stats.sharesCount = this.shares ? this.shares.length : 0;
-  this.stats.saveCount = this.saves ? this.saves.length : 0;
+  this.lastUpdatedAt = new Date();
   
-  // Calculate engagement
-  this.stats.engagement = this.totalEngagement;
-  
-  // Set publishedAt if not set and post is being published
-  if (this.isPublished && !this.publishedAt) {
-    this.publishedAt = new Date();
-  }
-  
-  // Handle scheduled posts
-  if (this.isScheduled && this.publishAt) {
-    this.isPublished = this.publishAt <= new Date();
+  // Calculate engagement rate
+  if (this.metrics.views > 0) {
+    this.metrics.engagementRate = (
+      (this.metrics.likes + this.metrics.comments * 2 + this.metrics.shares * 3) / 
+      this.metrics.views
+    ) * 100;
   }
   
   next();
 });
 
-// Method to add a comment
-socialPostSchema.methods.addComment = function(userId, content) {
-  this.comments.push({
-    user: userId,
-    content: content,
-    createdAt: new Date()
-  });
-  return this.save();
-};
-
-// Method to add a like
-socialPostSchema.methods.toggleLike = function(userId) {
-  const likeIndex = this.likes.indexOf(userId);
+// Methods
+socialPostSchema.methods.addView = function(userId, duration = 0) {
+  if (userId) {
+    this.userEngagement.views.push({
+      user: userId,
+      viewedAt: new Date(),
+      duration: duration
+    });
+  }
+  this.metrics.views += 1;
   
-  if (likeIndex > -1) {
-    // Unlike
-    this.likes.splice(likeIndex, 1);
-  } else {
-    // Like
-    this.likes.push(userId);
+  if (duration > 0) {
+    this.analytics.watchTime += duration;
+    this.analytics.averageViewDuration = 
+      (this.analytics.watchTime / this.metrics.views);
   }
   
   return this.save();
 };
 
-// Indexes for better query performance
-socialPostSchema.index({ artist: 1, publishedAt: -1 });
-socialPostSchema.index({ platform: 1, publishedAt: -1 });
-socialPostSchema.index({ tags: 1 });
-socialPostSchema.index({ featured: 1, publishedAt: -1 });
-socialPostSchema.index({ isPublished: 1, publishAt: 1 });
-socialPostSchema.index({ 'location.coordinates': '2dsphere' });
-socialPostSchema.index({ createdAt: -1 });
-socialPostSchema.index({ 'stats.engagement': -1 });
+socialPostSchema.methods.toggleLike = async function(userId) {
+  const likeIndex = this.userEngagement.likes.indexOf(userId);
+  
+  if (likeIndex > -1) {
+    // Unlike
+    this.userEngagement.likes.splice(likeIndex, 1);
+    this.metrics.likes = Math.max(0, this.metrics.likes - 1);
+  } else {
+    // Like
+    this.userEngagement.likes.push(userId);
+    this.metrics.likes += 1;
+  }
+  
+  await this.save();
+  return this.metrics.likes;
+};
 
-// Text search index for content and tags
-socialPostSchema.index({ 
-  content: 'text',
-  tags: 'text'
-});
+socialPostSchema.methods.addComment = function(userId, content, parentCommentId = null) {
+  const comment = {
+    user: userId,
+    content: content,
+    createdAt: new Date(),
+    likes: [],
+    replies: []
+  };
+  
+  if (parentCommentId) {
+    const parentComment = this.userEngagement.comments.id(parentCommentId);
+    if (parentComment) {
+      parentComment.replies.push(comment);
+    }
+  } else {
+    this.userEngagement.comments.push(comment);
+  }
+  
+  this.metrics.comments += 1;
+  return this.save();
+};
 
 module.exports = mongoose.model('SocialPost', socialPostSchema);

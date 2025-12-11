@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const SocialPost = require('../models/SocialPost');
 const auth = require('../middleware/auth');
+
+const socialController = require('../controllers/socialController');
 const axios = require('axios');
 
 // Get all social posts
@@ -77,5 +79,27 @@ router.post('/sync/tiktok', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
+// Social feed routes
+router.get('/feed', socialController.getSocialFeed);
+router.get('/trending',   socialController.getTrendingPosts);
+router.get('/posts/:postId/comments',   socialController.getPostComments);
+
+// Engagement routes
+router.post('/posts/:postId/engage',  socialController.engageWithPost);
+// router.post('/posts/:postId/comments',  socialController.addComment);
+
+// // Social media sync
+// router.post('/sync',  ('artist', 'admin'), socialController.syncSocialMedia);
+
+// // Post management
+// router.post('/posts',  ('artist', 'admin'), socialController.createPost);
+// router.delete('/posts/:postId',  ('artist', 'admin'), socialController.deletePost);
+
+// // User posts
+// router.get('/user/:userId/posts',  socialController.getUserPosts);
+
+// // Platform stats
+// router.get('/stats',  socialController.getPlatformStats);
 
 module.exports = router;

@@ -230,7 +230,7 @@ export const fetchUserStats = createAsyncThunk(
   'profile/fetchUserStats',
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/users/${userId}/stats`);
+      const response = await api.get(`/users/stats`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);

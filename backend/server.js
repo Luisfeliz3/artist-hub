@@ -64,6 +64,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 
 
+
+
 // Enhanced CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
@@ -73,7 +75,7 @@ const corsOptions = {
     const allowedOrigins = [
       process.env.CLIENT_URL || 'http://localhost:3000',
       'http://localhost:3001',
-      'http://127.0.0.1:3000',
+      'https://artist-hub-ebw6.onrender.com',
       'https://ui-avatars.com',
     ];
     

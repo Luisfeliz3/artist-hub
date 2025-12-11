@@ -639,32 +639,176 @@ const products = [
 ];
 
 // Sample social posts
+// Add this to your seed.js file
 const socialPosts = [
+  // Instagram Posts
   {
     platform: 'instagram',
-    content: 'Studio session vibes 🎵 Working on new material for the upcoming album! #studio #newmusic #producer',
-    media: [
-      {
-        url: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=1200&fit=crop',
-        type: 'image',
-        thumbnail: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop'
-      }
-    ],
-    tags: ['studio', 'newmusic', 'producer'],
-    featured: true
+    contentType: 'post',
+    title: 'Studio Session Vibes',
+    content: 'Back in the studio working on new material! 🎵 Can\'t wait to share what we\'ve been cooking up. #studio #musicproduction #newmusic',
+    media: [{
+      url: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1200&h=1200&fit=crop',
+      type: 'image',
+      thumbnail: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop'
+    }],
+    hashtags: ['studio', 'musicproduction', 'newmusic', 'artistlife', 'music'],
+    categories: ['music'],
+    metrics: {
+      likes: 2450,
+      comments: 156,
+      shares: 89,
+      saves: 450,
+      views: 12500
+    }
   },
   {
-    platform: 'tiktok',
-    content: 'New song snippet! What do you think? 👀 Full version dropping next week! #newsong #snippet',
-    media: [
-      {
-        url: 'https://videos.unsplash.com/video-1597609253215-55a3f8d5e5c8?mp4',
-        type: 'video',
-        thumbnail: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=400&fit=crop'
+    platform: 'instagram',
+    contentType: 'reel',
+    title: 'Behind the Scenes',
+    content: 'Quick studio tour and snippet of a new track! 🔊 #behindthescenes #musicstudio #reels',
+    media: [{
+      url: 'https://videos.unsplash.com/video-1597609253215-55a3f8d5e5c8?mp4',
+      type: 'video',
+      thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop',
+      duration: 30
+    }],
+    platformData: {
+      instagram: {
+        isReel: true,
+        musicTrack: 'Original Sound - Nova Rhythm'
       }
-    ],
-    tags: ['newsong', 'snippet', 'preview'],
-    featured: true
+    },
+    hashtags: ['behindthescenes', 'musicstudio', 'reels', 'producer', 'electronicmusic'],
+    metrics: {
+      likes: 5670,
+      comments: 342,
+      shares: 210,
+      saves: 890,
+      views: 85000
+    }
+  },
+  
+  // TikTok Posts
+  {
+    platform: 'tiktok',
+    contentType: 'video',
+    title: 'Dance Challenge Accepted!',
+    content: 'When someone challenges you to a dance off 💃 #dancechallenge #tiktokdance #viral',
+    media: [{
+      url: 'https://videos.unsplash.com/video-1529548545188-64323d871da6?mp4',
+      type: 'video',
+      thumbnail: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&h=400&fit=crop',
+      duration: 15
+    }],
+    platformData: {
+      tiktok: {
+        sound: {
+          id: 'sound123',
+          title: 'Popular Sound',
+          author: 'Trending Creator'
+        },
+        hashtags: ['dancechallenge', 'tiktokdance', 'viral', 'fyp']
+      }
+    },
+    hashtags: ['dancechallenge', 'tiktokdance', 'viral', 'fyp', 'dance'],
+    metrics: {
+      likes: 125000,
+      comments: 5670,
+      shares: 8900,
+      saves: 34500,
+      views: 2500000,
+      plays: 2800000
+    }
+  },
+  
+  // YouTube Posts
+  {
+    platform: 'youtube',
+    contentType: 'video',
+    title: 'Official Music Video - "Neon Dreams"',
+    content: 'The official music video for my latest single "Neon Dreams" is now live! Full video on YouTube. Link in bio! 🎬 #musicvideo #newsingle #synthwave',
+    media: [{
+      url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      type: 'video',
+      thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=450&fit=crop',
+      duration: 240
+    }],
+    platformData: {
+      youtube: {
+        videoId: 'dQw4w9WgXcQ',
+        duration: '4:00',
+        category: 'Music'
+      }
+    },
+    hashtags: ['musicvideo', 'newsingle', 'synthwave', 'electronicmusic', 'youtube'],
+    metrics: {
+      likes: 8900,
+      comments: 1245,
+      shares: 567,
+      saves: 1230,
+      views: 150000,
+      subscribersGained: 4500
+    }
+  },
+  
+  // Twitter Posts
+  {
+    platform: 'twitter',
+    contentType: 'tweet',
+    title: '',
+    content: 'Just announced: World Tour 2024! 🎉 Tickets on sale Friday. Which city are we seeing you in? #WorldTour2024 #concert #livemusic',
+    media: [{
+      url: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1200&h=630&fit=crop',
+      type: 'image',
+      thumbnail: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=210&fit=crop'
+    }],
+    platformData: {
+      twitter: {
+        retweets: 456,
+        favorites: 2345
+      }
+    },
+    hashtags: ['worldtour2024', 'concert', 'livemusic', 'tickets', 'music'],
+    metrics: {
+      likes: 2345,
+      comments: 567,
+      shares: 456,
+      saves: 890,
+      views: 125000,
+      retweets: 456,
+      favorites: 2345
+    }
+  },
+  
+  // Spotify Posts
+  {
+    platform: 'spotify',
+    contentType: 'track',
+    title: 'New Single Out Now!',
+    content: 'My new single "Midnight Drive" is now streaming on Spotify! Add it to your playlists 🎶 #newsingle #spotify #streaming',
+    media: [{
+      url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&h=1200&fit=crop',
+      type: 'image',
+      thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
+    }],
+    platformData: {
+      spotify: {
+        trackId: 'track123',
+        durationMs: 180000,
+        previewUrl: 'https://example.com/preview.mp3',
+        popularity: 75
+      }
+    },
+    hashtags: ['newsingle', 'spotify', 'streaming', 'newmusic', 'electronic'],
+    metrics: {
+      likes: 3450,
+      comments: 234,
+      shares: 123,
+      saves: 567,
+      views: 45000,
+      plays: 125000
+    }
   }
 ];
 

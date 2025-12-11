@@ -1,37 +1,8 @@
+// client/src/services/socialService.js
 import api from './api';
 
-export const socialService = {
-  getFeed: async (params = {}) => {
-    const response = await api.get('/social', { params });
-    return response.data;
-  },
-
-  createPost: async (postData) => {
-    const response = await api.post('/social', postData);
-    return response.data;
-  },
-
-  likePost: async (postId) => {
-    const response = await api.post(`/social/${postId}/like`);
-    return response.data;
-  },
-
-  getArtistPosts: async (artistId) => {
-    const response = await api.get(`/social/artist/${artistId}`);
-    return response.data;
-  },
-
-  syncInstagram: async () => {
-    const response = await api.post('/social/sync/instagram');
-    return response.data;
-  },
-
-  syncTikTok: async () => {
-    const response = await api.post('/social/sync/tiktok');
-    return response.data;
-  },
-
-    // Get social feed
+const socialService = {
+  // Get social feed
   getSocialFeed: async (params = {}) => {
     return api.get('/api/social/feed', { params });
   },
@@ -65,7 +36,11 @@ export const socialService = {
     return api.post('/api/social/sync', { platform, artistId });
   },
 
-  
+  // Create new post
+  createPost: async (postData) => {
+    return api.post('/api/social/posts', postData);
+  },
+
   // Delete post
   deletePost: async (postId) => {
     return api.delete(`/api/social/posts/${postId}`);
@@ -80,13 +55,6 @@ export const socialService = {
   getPlatformStats: async () => {
     return api.get('/api/social/stats');
   }
- 
 };
-
-
- 
-
- 
-
 
 export default socialService;
