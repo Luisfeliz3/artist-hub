@@ -10,6 +10,7 @@ const connectDB = async () => {
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     console.log(`🌎  ==> API Server now listening on PORT ${process.env.PORT || 3000}!`);
+    
   } catch (error) {
     console.error(error);
     process.exit(1);

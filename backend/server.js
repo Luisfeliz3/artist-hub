@@ -5,6 +5,7 @@ const logger =  require("morgan");
 const dotenv = require('dotenv');
 const path = require('path');
 const connectDB = require('./config/database');
+ 
 const app = express();
 const fileURLToPath =  require("url");
 
@@ -79,49 +80,49 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 
 
-// // Enhanced CORS configuration
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     // Allow requests with no origin (like mobile apps or curl requests)
-//     if (!origin) return callback(null, true);
+// Enhanced CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
     
-//     const allowedOrigins = [
+    const allowedOrigins = [
+    'http://localhost:3000/api',
+    'https://artist-hub-ebw6.onrender.com', // Your frontend Render URL
+    process.env.CLIENT_URL
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+    'Origin',
+    'Access-Control-Allow-Headers',
+  ],
+  exposedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  maxAge: 86400 // 24 hours
+};
+
+// const corsOptions = {
+//   origin: [
 //     'http://localhost:3000',
 //     'https://artist-hub-ebw6.onrender.com', // Your frontend Render URL
 //     process.env.CLIENT_URL
-//     ];
-    
-//     if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
+//   ].filter(Boolean),
 //   credentials: true,
-//   optionsSuccessStatus: 200,
-//   allowedHeaders: [
-//     'Content-Type',
-//     'Authorization',
-//     'X-Requested-With',
-//     'Accept',
-//     'Origin',
-//     'Access-Control-Allow-Headers',
-//   ],
-//   exposedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-//   maxAge: 86400 // 24 hours
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+// allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 // };
-
-const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'https://artist-hub-ebw6.onrender.com', // Your frontend Render URL
-    process.env.CLIENT_URL
-  ].filter(Boolean),
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-};
 
 
 app.use(cors(corsOptions));
