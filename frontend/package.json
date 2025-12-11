@@ -28,7 +28,7 @@
     "redux-persist": "^6.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+   "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .js,.jsx",
@@ -36,7 +36,7 @@
     "build:analyze": "npm run build && npx source-map-explorer build/static/js/*.js",
     "type-check": "npx tsc --noEmit",
     "cleanModPak": "rm -rf node_modules package-lock.json",
-    "build": "node --max-old-space-size=256 `which react-scripts` build",
+      "build": "node --max-old-space-size=256 `which react-scripts` build",
     "build:memory-optimized": "NODE_OPTIONS=\"--max-old-space-size=256\" react-scripts build"
   },
   "devDependencies": {

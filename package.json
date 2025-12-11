@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "e-commerce app that has the basics to launch a store",
   "scripts": {
-    "start": "npm run install:backend && npm run install:frontend && npm run start:prod",
+     "start": "npm run install:backend && npm run install:frontend && npm run start:prod",
     "start:prod": "npm i && npm run install:all && npm run start:all",
     "start:front": "npm run nav:",
     "start:dev": "concurrently \"nodemon --ignore 'frontend/*'\" \"npm run frontend\"",
@@ -11,9 +11,6 @@
     "server": "cd backend server.js",
     "build": "npm install --prefix ./frontend && npm run build --prefix ./frontend && npm install",
     "cleanModPak": "rm -rf node_modules package-lock.json",
-    "cleanAllModPak": "concurrently \"npm run clean:backend\" \"npm run clean:frontend\"",
-     "clean:backend": "cd backend && rm -rf node_modules package-lock.json",
-    "clean:frontend": "cd frontend && rm -rf node_modules package-lock.json",
     "start:devv": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run server",
     "dev:frontend": "cd frontend && npm run start",
@@ -28,6 +25,7 @@
     "nav:frontend": "cd frontend",
     "nav:root": "cd .",
     "nav:back": "cd .."
+
   },
   "devDependencies": {
     "express": "^4.18.2",

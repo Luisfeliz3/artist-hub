@@ -108,7 +108,7 @@ const corsOptions = {
     'Origin',
     'Access-Control-Allow-Headers',
   ],
-  exposedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Type', 'X-Requested-With'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   maxAge: 86400 // 24 hours
 };
