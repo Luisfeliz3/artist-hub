@@ -86,10 +86,9 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
-      process.env.CLIENT_URL || 'http://localhost:3000',
-      'http://localhost:3001',
-      'https://artist-hub-ebw6.onrender.com/',
-      'https://ui-avatars.com',
+    'http://localhost:3000',
+    'https://artist-hub-ebw6.onrender.com', // Your frontend Render URL
+    process.env.CLIENT_URL
     ];
     
     if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
@@ -108,8 +107,9 @@ const corsOptions = {
     'Origin',
     'Access-Control-Allow-Headers',
   ],
-  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  exposedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  maxAge: 86400 // 24 hours
 };
 
 // const corsOptions = {
