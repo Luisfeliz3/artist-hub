@@ -102,34 +102,34 @@ function AppRoutes() {
         <Route index element={<HomePage />} />
         {/* <Route path="artist/:id" element={<ArtistProfile />} /> */}
         {/* <Route path="shop" element={<ShopPage />} /> */}
-        <Route path="artists" element={<ArtistsPage />} />
+        <Route path="/artists" element={<ArtistsPage />} />
         {/* <Route path="feed" element={<SocialFeed />} /> */}
         {/* <Route path="cart" element={<CartPage />} /> */}
         
         {/* Auth Routes */}
-        <Route path="login" element={
+        <Route path="/login" element={
           <AuthRoute>
             <LoginPage />
           </AuthRoute>
         } />
-        <Route path="register" element={
+        <Route path="/register" element={
           <AuthRoute>
             {/* <RegisterPage /> */}
           </AuthRoute>
         } />
         
         {/* Protected Routes */}
-        <Route path="checkout" element={
+        <Route path="/checkout" element={
           <ProtectedRoute>
             {/* <CheckoutPage /> */}
           </ProtectedRoute>
         } />
-        <Route path="dashboard/*" element={
+        <Route path="/dashboard/*" element={
           <ProtectedRoute>
             {/* <DashboardPage /> */}
           </ProtectedRoute>
         } />
-        <Route path="profile/:userId?" element={
+        <Route path="/profile/:userId?" element={
           <ProtectedRoute>
             <ProfilePage />
           </ProtectedRoute>
