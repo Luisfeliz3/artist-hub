@@ -1,23 +1,39 @@
 import axios from 'axios';
 import { authService } from './authService';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+
+// Determine API base URL based on environment
+const getBaseURL = () => {
+  // In production, use relative URL (same domain)
+  if (process.env.NODE_ENV === 'production') {
+    return '/api';
+  }
+  // In development, use the backend server
+  return process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+};
 
 // Create axios instance
-const api = axios.create({
-  baseURL: API_URL,
+const API = axios.create({
+  baseURL: getBaseURL(),
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Important for sessions/cookies
 });
 
-// Request interceptor to add token
-api.interceptors.request.use(
+// Request interceptor
+API.interceptors.request.use(
   (config) => {
-    const token = authService.getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      try {
+        const { token } = JSON.parse(userInfo);
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (error) {
+        console.error('Error parsing userInfo:', error);
+      }
     }
     return config;
   },
@@ -26,8 +42,20 @@ api.interceptors.request.use(
   }
 );
 
+// Response interceptor
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('userInfo');
+      // Don't redirect automatically to avoid loops
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Response interceptor for error handling
-api.interceptors.response.use(
+API.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
@@ -49,4 +77,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export default API;
