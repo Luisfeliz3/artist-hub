@@ -21,46 +21,58 @@ if (process.env.NODE_ENV !== 'production') {
 
 connectDB();
 
-
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 // Serve static assets from react build
 app.use(express.static(path.join(__dirname, "/frontend/build")));
 
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 app.get("/artist/:id", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
 )
-
-app.get("/shop", (req,res)=>
+app.get("/artist", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
 )
-app.get("/music", (req,res)=>
+app.get("/profile", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
-  )
+)
+
+// app.get("/shop", (req,res)=>
+//   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
+// )
+// app.get("/music", (req,res)=>
+//   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
+//   )
 app.get("/users", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
   )
 app.get("/products", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
   )
-app.get("/social", (req,res)=>
-  res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
-  )
+// app.get("/social", (req,res)=>
+//   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
+//   )
 app.get("/stats", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
   )
 
-  app.get("/feed", (req,res)=>
-  res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
-)
+//   app.get("/feed", (req,res)=>
+//   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
+// )
 app.get("/login", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
 )
 app.get("/register", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
 )
-app.get("/checkout", (req,res)=>
-  res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
-)
+// app.get("/checkout", (req,res)=>
+//   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
+// )
 app.get("/dashboard", (req,res)=>
   res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
 )
@@ -164,11 +176,11 @@ app.get('/api/health', (req, res) => {
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   // Serve static files from the React build
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  app.use(express.static(path.join(__dirname, './frontend/build')));
 
   // Handle React routing, return all requests to React app
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+    res.sendFile(path.join(__dirname, './frontend/build', 'index.html'));
   });
 }
 

@@ -147,12 +147,10 @@ export const {
 
 // Selectors
 export const selectSocialFeed = (state) => state.social.feed;
-export const selectFeaturedPosts = (state) =>
-  state.social.feed.filter((post) => post.featured);
+export const selectFeaturedPosts = (state) =>state.social.feed.filter((post) => post.featured);
 export const selectPlatformFilter = (state) => state.social.platformFilter;
 export const selectSocialLoading = (state) => state.social.isLoading;
 export const selectHasMorePosts = (state) => state.social.hasMore;
-export const selectArtistPosts = (artistId) => (state) =>
-  state.social.artistPosts[artistId] || [];
+export const selectArtistPosts = (artistId) => (state) =>state.social.artistPosts[artistId] || [];
 
 export default socialSlice.reducer;
