@@ -2,7 +2,7 @@
   "name": "artist-hub",
   "version": "0.1.0",
   "private": true,
-  
+  "homepage" : "./",
   "dependencies": {
     "@date-io/date-fns": "^3.2.1",
     "@emotion/react": "^11.14.0",
