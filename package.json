@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "e-commerce app that has the basics to launch a store",
   "scripts": {
-     "start": "npm run install:backend && npm run install:frontend && npm run start:prod",
+    "start": "npm run install:backend && npm run install:frontend && npm run start:prod",
     "start:prod": "npm i && npm run install:all && npm run start:all",
     "start:front": "npm run nav:",
     "start:dev": "concurrently \"nodemon --ignore 'frontend/*'\" \"npm run frontend\"",

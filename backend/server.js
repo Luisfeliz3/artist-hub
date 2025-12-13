@@ -72,7 +72,7 @@ connectDB();
 
 const corsOptions = {
   origin: [
-    'http://localhost:3001',
+    'http://localhost:3000',
     'https://artist-hub-ebw6.onrender.com', // Your frontend Render URL
     process.env.CLIENT_URL
   ].filter(Boolean),
