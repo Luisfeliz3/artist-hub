@@ -1,5 +1,5 @@
 {
-  "name": "artist-hub",
+  "name": "backend",
   "version": "1.0.0",
   "description": "Backend for artist-hub",
   "main": "server.js",
