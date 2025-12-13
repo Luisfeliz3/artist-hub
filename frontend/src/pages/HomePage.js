@@ -53,7 +53,7 @@ import { toast } from 'react-hot-toast';
 
 // Redux actions and selectors
 import { fetchFeaturedProducts, selectFeaturedProducts, selectProductsLoading } from '../redux/slices/productSlice';
-import { fetchSocialFeed, selectSocialFeed, selectFeaturedPosts } from '../redux/slices/socialSlice';
+// import { fetchSocialFeed, selectSocialFeed, selectFeaturedPosts } from '../redux/slices/socialSlice';
 import { fetchCurrentUser, selectIsAuthenticated } from '../redux/slices/authSlice';
 import { fetchCart } from '../redux/slices/cartSlice';
 import { fetchFavorites, toggleFavorite } from '../redux/slices/favoritesSlice';
@@ -90,8 +90,8 @@ const HomePage = () => {
   // Redux state
   const featuredProducts = useSelector(selectFeaturedProducts);
   const productsLoading = useSelector(selectProductsLoading);
-  const socialFeed = useSelector(selectSocialFeed);
-  const featuredPosts = useSelector(selectFeaturedPosts);
+  // const socialFeed = useSelector(selectSocialFeed);
+  // const featuredPosts = useSelector(selectFeaturedPosts);
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   // Fetch all data on component mount
@@ -104,7 +104,7 @@ const HomePage = () => {
         dispatch(fetchFeaturedProducts());
 
         // Fetch social feed
-        dispatch(fetchSocialFeed({ page: 1, limit: 6 }));
+        // dispatch(fetchSocialFeed({ page: 1, limit: 6 }));
 
         // Fetch additional data from backend
         await Promise.all([

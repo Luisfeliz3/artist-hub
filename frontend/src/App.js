@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Provider, useSelector, useDispatch } from 'react-redux';
@@ -140,6 +140,18 @@ function AppRoutes() {
 }
 
 function App() {
+
+    const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true); // Mark that we're on client now
+  }, []);
+  
+  // Prevent hydration mismatch
+  if (!isClient) {
+    return null; // or a loading skeleton
+  }
+  
   return (
     <Router>
       <Provider store={store}>

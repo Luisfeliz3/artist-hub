@@ -2,7 +2,7 @@
   "name": "artist-hub",
   "version": "0.1.0",
   "private": true,
-  "homepage" : "./",
+  "homepage" : ".",
   "dependencies": {
     "@date-io/date-fns": "^3.2.1",
     "@emotion/react": "^11.14.0",
@@ -33,11 +33,11 @@
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .js,.jsx",
     "lint:fix": "eslint src --ext .js,.jsx --fix",
-    "build:analyze": "npm run build && npx source-map-explorer build/static/js/*.js",
     "type-check": "npx tsc --noEmit",
     "cleanModPak": "rm -rf node_modules package-lock.json",
-      "build": "node --max-old-space-size=256 `which react-scripts` build",
-    "build:memory-optimized": "NODE_OPTIONS=\"--max-old-space-size=256\" react-scripts build"
+    "build": "react-scripts --max_old_space_size=4096 build",
+    "build:clean": "rm -rf build && npm run build",
+    "build:analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "devDependencies": {
     "eslint": "^8.45.0",
