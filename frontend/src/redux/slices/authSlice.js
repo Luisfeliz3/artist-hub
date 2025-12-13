@@ -33,7 +33,7 @@ export const loginWithGoogle = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       // Redirect to Google OAuth endpoint
-      window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/google`;
+      window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/auth/google`;
     } catch (error) {
       return rejectWithValue(error.message);
     }

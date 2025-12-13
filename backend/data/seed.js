@@ -815,7 +815,7 @@ const socialPosts = [
 async function seedDatabase() {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI || "mongodb+srv://user1:password1234@cluster0.k6ma6.mongodb.net/artist-hub?retryWrites=true&w=majority") 
+    await mongoose.connect(process.env.MONGO_URI ) 
     console.log('Connected to MongoDB for seeding...');
 
     // Clear existing data
