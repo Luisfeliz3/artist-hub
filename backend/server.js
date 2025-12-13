@@ -31,14 +31,14 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
   });
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-});
+// app.get('/*', function (req, res) {
+//   res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+// });
 
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-});
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+// });
 
 app.get("/artist", (req,res)=>
   res.sendFile(path.join(__dirname, '../frontend/build/index.html'))
@@ -133,7 +133,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const corsOptions = {
   origin: [
-    'http://localhost:3000/api',
+    'http://localhost:3001',
     'https://artist-hub-ebw6.onrender.com', // Your frontend Render URL
     process.env.CLIENT_URL
   ].filter(Boolean),
