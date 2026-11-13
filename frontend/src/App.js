@@ -16,7 +16,7 @@ import ArtistsPage from './pages/ArtistsPage';
 // import MusicPage from './pages/MusicPage';
 // import SocialFeed from './pages/SocialFeed';
 import LoginPage from './pages/LoginPage';
-// import RegisterPage from './pages/RegisterPage';
+import GoogleCallbackPage from './pages/GoogleCallbackPage';
 // import CheckoutPage from './pages/CheckoutPage';
 // import DashboardPage from './pages/DashboardPage';
 // import CartPage from './pages/CartPage';
@@ -114,10 +114,12 @@ function AppRoutes() {
         } />
         <Route path="/register" element={
           <AuthRoute>
-            {/* <RegisterPage /> */}
+            <LoginPage signUp />
           </AuthRoute>
         } />
         
+        <Route path="/auth/callback" element={<GoogleCallbackPage />} />
+
         {/* Protected Routes */}
         <Route path="/checkout" element={
           <ProtectedRoute>

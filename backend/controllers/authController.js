@@ -3,54 +3,44 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// Google OAuth Strategy
-passport.use(new GoogleStrategy({
+const { randomBytes } = require('crypto');
+const parseCookies = require('cookie-parser')();
+
+const clientURL = process.env.CLIENT_URL || 'http://localhost:3000';
+const apiOrigin = process.env.NODE_ENV === 'production' ? clientURL : 'http://localhost:3001';
+const googleCallbackURL = process.env.GOOGLE_CALLBACK_URL || new URL('/api/auth/google/callback', apiOrigin).href;
+const googleConfigured = Boolean(
+  process.env.GOOGLE_CLIENT_ID?.endsWith('.apps.googleusercontent.com') &&
+  process.env.GOOGLE_CLIENT_SECRET &&
+  process.env.JWT_SECRET
+);
+const googleCookie = { httpOnly: true, sameSite: 'lax', secure: new URL(googleCallbackURL).protocol === 'https:' };
+
+if (googleConfigured) {
+  passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/api/auth/google/callback'
-  },
-  async (accessToken, refreshToken, profile, done) => {
+    callbackURL: googleCallbackURL
+  }, async (accessToken, refreshToken, profile, done) => {
     try {
-      let user = await User.findOne({ googleId: profile.id });
-      
-      if (!user) {
-        user = await User.findOne({ email: profile.emails[0].value });
-        
-        if (user) {
-          user.googleId = profile.id;
-          await user.save();
-        } else {
-          user = await User.create({
-            googleId: profile.id,
-            email: profile.emails[0].value,
-            username: profile.displayName.replace(/\s+/g, '').toLowerCase() + Math.floor(Math.random() * 1000),
-            profileImage: profile.photos[0].value,
-            role: 'user'
-          });
-        }
-      }
-      
-      done(null, user);
+      const existing = await User.findOne({ googleId: profile.id });
+      if (existing) return done(null, existing);
+
+      const email = profile.emails?.find(address => address.verified === true)?.value?.toLowerCase();
+      if (!email || await User.exists({ email })) return done(null, false);
+
+      const user = await User.create({
+        googleId: profile.id,
+        email,
+        username: 'google' + randomBytes(8).toString('hex'),
+        profileImage: profile.photos?.[0]?.value
+      });
+      return done(null, user);
     } catch (error) {
-      done(error, null);
+      return done(error);
     }
-  }
-));
-
-// Serialize user
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-// Deserialize user
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
-});
+  }));
+}
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -110,7 +100,7 @@ exports.login = async (req, res) => {
     }
 
     // Check password
-    const isMatch = await user.comparePassword(password);
+    const isMatch = user.password && await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -133,22 +123,46 @@ exports.login = async (req, res) => {
   }
 };
 
-// Google auth routes
-exports.googleAuth = passport.authenticate('google', {
-  scope: ['profile', 'email']
-});
+// Keep OAuth state and the short-lived completion credential out of JavaScript.
+exports.googleCookies = parseCookies;
+exports.googleAuth = (req, res, next) => {
+  if (!googleConfigured) {
+    return res.redirect(new URL('/login?error=google_unavailable', clientURL).href);
+  }
+
+  const state = randomBytes(32).toString('hex');
+  res.cookie('google_state', state, { ...googleCookie, maxAge: 600000 });
+  return passport.authenticate('google', { scope: ['profile', 'email'], state, session: false })(req, res, next);
+};
 
 exports.googleCallback = (req, res, next) => {
-  passport.authenticate('google', (err, user) => {
-    if (err || !user) {
-      return res.redirect(`${process.env.CLIENT_URL}/login?error=auth_failed`);
-    }
+  const failure = new URL('/login?error=auth_failed', clientURL).href;
+  res.clearCookie('google_state', googleCookie);
+  if (!googleConfigured || typeof req.query.state !== 'string' || req.query.state !== req.cookies.google_state) {
+    return res.redirect(failure);
+  }
 
-    const token = generateToken(user._id);
-    
-    // Redirect with token
-    res.redirect(`${process.env.CLIENT_URL}/auth/callback?token=${token}&userId=${user._id}`);
+  return passport.authenticate('google', { session: false }, (error, user) => {
+    if (error || !user) return res.redirect(failure);
+    const completion = jwt.sign({ userId: user.id, purpose: 'google-completion' }, process.env.JWT_SECRET, {
+      expiresIn: '60s'
+    });
+    res.cookie('google_completion', completion, { ...googleCookie, maxAge: 60000 });
+    return res.redirect(new URL('/auth/callback', clientURL).href);
   })(req, res, next);
+};
+
+exports.completeGoogleAuth = async (req, res) => {
+  res.clearCookie('google_completion', googleCookie).set('Cache-Control', 'no-store');
+  try {
+    const { userId, purpose } = jwt.verify(req.cookies.google_completion, process.env.JWT_SECRET);
+    if (purpose !== 'google-completion') return res.sendStatus(401);
+    const user = await User.findById(userId).select('-password');
+    if (!user) return res.sendStatus(401);
+    return res.json({ token: generateToken(user.id), user: { ...user.toObject(), id: user.id } });
+  } catch {
+    return res.sendStatus(401);
+  }
 };
 
 // Get current user

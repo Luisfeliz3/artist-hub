@@ -20,7 +20,8 @@ const validateLogin = [
 router.post('/register', validateRegister, authController.register);
 router.post('/login', validateLogin, authController.login);
 router.get('/google', authController.googleAuth);
-router.get('/google/callback', authController.googleCallback);
+router.get('/google/callback', authController.googleCookies, authController.googleCallback);
+router.post('/google/complete', authController.googleCookies, authController.completeGoogleAuth);
 router.get('/me', auth, authController.getCurrentUser);
 router.post('/logout', auth, authController.logout);
 

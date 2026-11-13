@@ -32,8 +32,9 @@ export const loginWithGoogle = createAsyncThunk(
   'auth/google',
   async (_, { rejectWithValue }) => {
     try {
-      // Redirect to Google OAuth endpoint
-      window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/auth/google`;
+      const url = api.getUri({ url: '/auth/google' });
+      const localAPI = process.env.NODE_ENV === 'development' && url.startsWith('/');
+      window.location.assign(localAPI ? new URL(url, 'http://localhost:3001') : url);
     } catch (error) {
       return rejectWithValue(error.message);
     }

@@ -24,17 +24,8 @@ const API = axios.create({
 // Request interceptor
 API.interceptors.request.use(
   (config) => {
-    const userInfo = localStorage.getItem('userInfo');
-    if (userInfo) {
-      try {
-        const { token } = JSON.parse(userInfo);
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-      } catch (error) {
-        console.error('Error parsing userInfo:', error);
-      }
-    }
+    const token = localStorage.getItem('token');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => {

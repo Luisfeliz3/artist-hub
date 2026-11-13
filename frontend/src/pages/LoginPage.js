@@ -25,13 +25,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import {
   loginUser,
+  registerUser,
   loginWithGoogle,
   selectAuthLoading,
   selectAuthError,
   selectIsAuthenticated,
 } from '../redux/slices/authSlice';
 
-const LoginPage = () => {
+const LoginPage = ({ signUp = false }) => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const LoginPage = () => {
   
   const isLoading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
+  const googleError = new URLSearchParams(location.search).get('error');
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   // Redirect if already authenticated
@@ -52,10 +54,7 @@ const LoginPage = () => {
   }, [isAuthenticated, navigate, location]);
 
   const onSubmit = async (data) => {
-    const result = await dispatch(loginUser(data));
-    if (loginUser.fulfilled.match(result)) {
-      // Success - navigation handled by useEffect
-    }
+    await dispatch(signUp ? registerUser(data) : loginUser(data));
   };
 
   const handleGoogleLogin = () => {
@@ -98,10 +97,10 @@ const LoginPage = () => {
           >
             <Box sx={{ textAlign: 'center', mb: 4 }}>
               <Typography variant="h3" className="gradient-text" gutterBottom>
-                Welcome Back
+                {signUp ? 'Create an account' : 'Welcome Back'}
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Sign in to your ArtistHub account
+                {signUp ? 'Join ArtistHub' : 'Sign in to your ArtistHub account'}
               </Typography>
             </Box>
 
@@ -112,6 +111,20 @@ const LoginPage = () => {
             )}
 
             <form onSubmit={handleSubmit(onSubmit)}>
+              {signUp && (
+                <TextField
+                  fullWidth
+                  label="Username"
+                  autoComplete="username"
+                  margin="normal"
+                  error={!!errors.username}
+                  helperText={errors.username?.message}
+                  {...register('username', {
+                    required: 'Username is required',
+                    pattern: { value: /^[a-z0-9]{3,30}$/i, message: 'Use 3–30 letters or numbers' },
+                  })}
+                />
+              )}
               <TextField
                 fullWidth
                 label="Email"
@@ -198,26 +211,35 @@ const LoginPage = () => {
                 {isLoading ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
-                  'Sign In'
+                  signUp ? 'Sign up' : 'Sign in'
                 )}
               </Button>
 
-              {/* Demo Login Button */}
-              <Button
-                fullWidth
-                variant="outlined"
-                size="large"
-                onClick={handleDemoLogin}
-                disabled={isLoading}
-                sx={{
-                  py: 1.5,
-                  mb: 3,
-                  borderColor: 'rgba(255, 255, 255, 0.2)',
-                }}
-              >
-                Try Demo Account
-              </Button>
+              {!signUp && (
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  size="large"
+                  onClick={handleDemoLogin}
+                  disabled={isLoading}
+                  sx={{
+                    py: 1.5,
+                    mb: 3,
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                  }}
+                >
+                  Try Demo Account
+                </Button>
+              )}
             </form>
+
+            {googleError && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {googleError === 'google_unavailable'
+                  ? 'Google sign-in is unavailable until OAuth is configured.'
+                  : 'Google sign-in could not be completed. If you already have an account, sign in with your password.'}
+              </Alert>
+            )}
 
             <Divider sx={{ my: 3, color: 'text.secondary' }}>
               <Typography variant="body2" color="text.secondary">
@@ -241,29 +263,24 @@ const LoginPage = () => {
                 },
               }}
             >
-              Sign in with Google
+              {signUp ? 'Sign up with Google' : 'Sign in with Google'}
             </Button>
 
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Typography variant="body2" color="text.secondary">
-                Don't have an account?{' '}
-                <Link to="/register" style={{ textDecoration: 'none' }}>
+                {signUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+                <Link to={signUp ? '/login' : '/register'} style={{ textDecoration: 'none' }}>
                   <Typography
                     component="span"
                     color="primary.main"
                     sx={{ fontWeight: 600, '&:hover': { textDecoration: 'underline' } }}
                   >
-                    Sign up
+                    {signUp ? 'Sign in' : 'Sign up'}
                   </Typography>
                 </Link>
               </Typography>
             </Box>
 
-            <Alert severity="info" sx={{ mt: 3, background: 'rgba(0,212,255,0.1)' }}>
-              <Typography variant="body2">
-                Demo account: demo@artisthub.com / demo123
-              </Typography>
-            </Alert>
           </Paper>
         </motion.div>
       </Box>
